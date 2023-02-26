@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1;
 
-public static class Helper
+public static partial class Helper
 {
     public static string ToTypeExplain(this object obj) =>
         string.Join(string.Empty, TypeExplain(obj.GetType()));
@@ -21,7 +21,7 @@ public static class Helper
                 yield return i;
             }
         }
-        else if (Regex.IsMatch(t.Name, "^ValueTuple`.*", RegexOptions.Compiled))
+        else if (ValueTupleRegex().IsMatch(t.Name))
         {
             yield return "(";
             yield return string.Join(", ", t.GenericTypeArguments.SelectMany(TypeExplain));
@@ -42,4 +42,7 @@ public static class Helper
         }
         
     }
+
+    [GeneratedRegex("^ValueTuple`.*", RegexOptions.Compiled)]
+    private static partial Regex ValueTupleRegex();
 }
